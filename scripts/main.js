@@ -13,7 +13,7 @@ async function getShow(){
         return
     }
 
-    var identifier
+    let identifier
 
     for(let i=0;i<res.response.docs.length;i++){
         console.log(res.response.docs[i].identifier)
@@ -27,28 +27,6 @@ async function getShow(){
     }
 
     document.getElementById("playerContent").src = "https://archive.org/embed/"+identifier+"&playlist=1"
-}
-
-
-async function getAllShows(){
-
-    let res = await fetch('https://api.setlist.fm/rest/1.0/artist/b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d', {
-    method: 'GET',
-    headers: {
-    'Accept': 'application/json',
-    'x-api-key': "506G_li4jJSLSgWgOHHF-t4HH4pcTmNQLri2"
-    }
-    });
-
-    let data = await res.json()
-    console.log(data)
-
-
-}
-
-
-async function randomShow(){
-
 }
 
 

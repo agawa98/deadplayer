@@ -2,3 +2,7 @@
     width:100%;
     height:100vh;
 }
+#pageHeader{
+    text-align: center;
+    font-family: 'Kanit', sans-serif;
+}

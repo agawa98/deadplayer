@@ -1,55 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/main.css">
+    
     <title>Document</title>
 </head>
 <body>
 
-    <h1>dead player pre-pre-alpha</h1>
-    <div id="datePickContainer">
-        <p>wybierz datę: </p>
-        <div id="datePickSelect">
-            <label>dzień: </label>
-            <select id="dzien">
-                <option value="01">1</option>
-                <option value="02">2</option>
-                <option value="03">3</option>
-                <option value="04">4</option>
-                <option value="05">5</option>
-                <option value="06">6</option>
-                <option value="07">7</option>
-                <option selected value="08">8</option>
-                <option value="09">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-                <option value="13">13</option>
-                <option value="14">14</option>
-                <option value="15">15</option>
-                <option value="16">16</option>
-                <option value="17">17</option>
-                <option value="18">18</option>
-                <option value="19">19</option>
-                <option value="20">20</option>
-                <option value="21">21</option>
-                <option value="22">22</option>
-                <option value="23">23</option>
-                <option value="24">24</option>
-                <option value="25">25</option>
-                <option value="26">26</option>
-                <option value="27">27</option>
-                <option value="28">28</option>
-                <option value="29">29</option>
-                <option value="30">30</option>
-                <option value="31">31</option>
-            </select>
+    <h1 id="pageHeader">Dead Player (pre-pre-alpha)</h1>
+        <div id="datePickContainer">
+            <p>Znajdź koncert po dacie: </p>
+            <div id="datePickSelect">
+                <label>dzień: </label>
+                <select id="dzien">
+                    <option value="01">1</option>
+                    <option value="02">2</option>
+                    <option value="03">3</option>
+                    <option value="04">4</option>
+                    <option value="05">5</option>
+                    <option value="06">6</option>
+                    <option value="07">7</option>
+                    <option selected value="08">8</option>
+                    <option value="09">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                </select>
 
 
-            <label>miesiąc:</label>
+                <label>miesiąc:</label>
                 <select id="miesiac">
                     <option value="01">styczeń</option>
                     <option value="02">luty</option>
@@ -64,8 +69,8 @@
                     <option value="11">listopad</option>
                     <option value="12">grudzień</option>
                 </select>
-            
-            <label>rok:</label>
+                
+                <label>rok:</label>
                 <select id="rok">
                     <option value="1961">1961</option>
                     <option value="1962">1962</option>
@@ -105,10 +110,22 @@
                     <option value="1995">1995</option>
                 </select>
 
+                <br>
+                
+                <label>typ nagrania:</label>
+                <select id="recordingType">
+                    <option value="sbd">soundboard</option>
+                    <option value="aud">audience</option>
+                    <option value="mtx">matrix</option>
+                </select>
+
+                <br>
+
                 <button id="getShowButton">get show</button>
-            
+                
+            </div>
         </div>
-    </div>
+
     <div id="player">
         <iframe id="playerContent" src="" width="600" height="800" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
     </div>
