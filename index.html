@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/main.css">
-    <title>Document</title>
+    
+    <title>Dead Player</title>
 </head>
 <body>
 
-    <h1>dead player pre-pre-alpha</h1>
+    <h1 id="pageHeader">Dead Player (alpha)</h1>
     <div id="datePickContainer">
-        <p>wybierz datę: </p>
+        <p>Get show by date: </p>
         <div id="datePickSelect">
-            <label>dzień: </label>
+            <label>day: </label>
             <select id="dzien">
                 <option value="01">1</option>
                 <option value="02">2</option>
@@ -49,68 +54,87 @@
             </select>
 
 
-            <label>miesiąc:</label>
-                <select id="miesiac">
-                    <option value="01">styczeń</option>
-                    <option value="02">luty</option>
-                    <option value="03">marzec</option>
-                    <option value="04">kwiecień</option>
-                    <option selected value="05">maj</option>
-                    <option value="06">czerwiec</option>
-                    <option value="07">lipiec</option>
-                    <option value="08">sierpień</option>
-                    <option value="09">wrzesień</option>
-                    <option value="10">październik</option>
-                    <option value="11">listopad</option>
-                    <option value="12">grudzień</option>
-                </select>
+            <label>month:</label>
+            <select id="miesiac">
+                <option value="01">january</option>
+                <option value="02">february</option>
+                <option value="03">march</option>
+                <option value="04">april</option>
+                <option selected value="05">may</option>
+                <option value="06">june</option>
+                <option value="07">july</option>
+                <option value="08">august</option>
+                <option value="09">september</option>
+                <option value="10">october</option>
+                <option value="11">november</option>
+                <option value="12">december</option>
+            </select>
             
-            <label>rok:</label>
-                <select id="rok">
-                    <option value="1961">1961</option>
-                    <option value="1962">1962</option>
-                    <option value="1963">1963</option>
-                    <option value="1964">1964</option>
-                    <option value="1965">1965</option>
-                    <option value="1966">1966</option>
-                    <option value="1967">1967</option>
-                    <option value="1968">1968</option>
-                    <option value="1969">1969</option>
-                    <option value="1970">1970</option>
-                    <option value="1971">1971</option>
-                    <option value="1971">1971</option>
-                    <option value="1972">1972</option>
-                    <option value="1973">1973</option>
-                    <option value="1974">1974</option>
-                    <option value="1975">1975</option>
-                    <option value="1976">1976</option>
-                    <option selected value="1977">1977</option>
-                    <option value="1978">1978</option>
-                    <option value="1979">1979</option>
-                    <option value="1980">1980</option>
-                    <option value="1981">1981</option>
-                    <option value="1982">1982</option>
-                    <option value="1983">1983</option>
-                    <option value="1984">1984</option>
-                    <option value="1985">1985</option>
-                    <option value="1986">1986</option>
-                    <option value="1987">1987</option>
-                    <option value="1988">1988</option>
-                    <option value="1989">1989</option>
-                    <option value="1990">1990</option>
-                    <option value="1991">1991</option>
-                    <option value="1992">1992</option>
-                    <option value="1993">1993</option>
-                    <option value="1994">1994</option>
-                    <option value="1995">1995</option>
-                </select>
+            <label>year:</label>
+            <select id="rok">
+                <option value="1961">1961</option>
+                <option value="1962">1962</option>
+                <option value="1963">1963</option>
+                <option value="1964">1964</option>
+                <option value="1965">1965</option>
+                <option value="1966">1966</option>
+                <option value="1967">1967</option>
+                <option value="1968">1968</option>
+                <option value="1969">1969</option>
+                <option value="1970">1970</option>
+                <option value="1971">1971</option>
+                <option value="1971">1971</option>
+                <option value="1972">1972</option>
+                <option value="1973">1973</option>
+                <option value="1974">1974</option>
+                <option value="1975">1975</option>
+                <option value="1976">1976</option>
+                <option selected value="1977">1977</option>
+                <option value="1978">1978</option>
+                <option value="1979">1979</option>
+                <option value="1980">1980</option>
+                <option value="1981">1981</option>
+                <option value="1982">1982</option>
+                <option value="1983">1983</option>
+                <option value="1984">1984</option>
+                <option value="1985">1985</option>
+                <option value="1986">1986</option>
+                <option value="1987">1987</option>
+                <option value="1988">1988</option>
+                <option value="1989">1989</option>
+                <option value="1990">1990</option>
+                <option value="1991">1991</option>
+                <option value="1992">1992</option>
+                <option value="1993">1993</option>
+                <option value="1994">1994</option>
+                <option value="1995">1995</option>
+            </select>
 
-                <button id="getShowButton">get show</button>
+            <br>
+            
+            <label>recording type:</label>
+            <select id="recordingType">
+                <option value="any">any</option>
+                <option value="sbd">soundboard</option>
+                <option value="aud">audience</option>
+                <option value="mtx">matrix</option>
+            </select>
+
+            <br>
+
+            <button id="getShowButton">get show</button>
             
         </div>
     </div>
+
     <div id="player">
-        <iframe id="playerContent" src="" width="600" height="800" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+        <iframe id="playerContent" src="" width="50" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+    </div>
+
+    <div id="resultsContainer">
+        <table id="resultsTable">
+
+        </table>
     </div>
 
 
