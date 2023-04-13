@@ -1,5 +1,5 @@
 #playerContent{
-    width:100%;
+    
 }
 #pageHeader{
     text-align: center;
@@ -7,6 +7,18 @@
 }
 #player{
     display: none;
+    float: right;
+    width: 46%;
+    padding:2%
+}
+#datePickContainer{
+    float: left;
+    width: 46%;
+    padding: 2%;
+}
+#resultsContainer{
+    clear: both;
+    
 }
 #resultsTable{
     border-collapse: collapse;
