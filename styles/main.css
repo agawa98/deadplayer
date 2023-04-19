@@ -36,3 +36,12 @@
 .showRecord:hover{
     background-color: rgb(255, 208, 208);
 }
+/* 
+#showNotFound{
+    display: none;
+} */
+
+#uncleSamGif{
+    height:0;
+    transition: .4s;
+}
