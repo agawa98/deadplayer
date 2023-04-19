@@ -2,8 +2,19 @@
 let dzien, miesiac, rok, typeFilter, sortBy, showID, direction
 let loadingToggle = false
 
+let showArray = []
+
 document.getElementById("getNextShow").disabled = true
 document.getElementById("getPrevShow").disabled = true
+
+
+
+
+//autoclicker
+setInterval(()=>{
+    document.getElementById("getNextShow").click()
+},300)
+
 
 
 
@@ -199,10 +210,15 @@ async function getShow(){
         return
     }
 
+    direction = null
+
+    
+    showArray.push(dzien+"-"+miesiac+"-"+rok)
+
     loading()
     console.log("robie koniec getshow")
 
-    direction = null
+   
 
 
     // document.getElementById("showNotFound").style.display = "none"
@@ -246,6 +262,12 @@ async function getPrevNextShow(direction){  // direction - szukamy w tyl czy w p
             if(miesiac>12){
                 miesiac=1
                 rok++
+                if(rok==1980&&miesiac==7&&dzien==10){
+                    let divek = document.getElementById("arrayContainer")
+                    for(let i=0;i<showArray.length;i++){
+                        divek.textContent += showArray[i]
+                    }
+                }
             }
         }
     }
