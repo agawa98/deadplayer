@@ -34,7 +34,7 @@
     transition: .3s;
 }
 .showRecord:hover{
-    background-color: rgb(255, 208, 208);
+    background-color: rgb(255, 187, 187);
 }
 /* 
 #showNotFound{
@@ -44,4 +44,16 @@
 #uncleSamGif{
     height:0;
     transition: .4s;
+}
+.tableRowActive{
+    background-color: rgb(255, 208, 208);
+}
+.formButtons{
+    cursor: pointer;
+}
+#todayShowsList>li{
+    transition: .25s;
+}
+#todayShowsList>li:hover{
+    color: rgb(214, 110, 24);
 }

@@ -13,14 +13,16 @@
     <title>Dead Player</title>
 </head>
 <body>
-
+    
     <h1 id="pageHeader">Dead Player (alpha)</h1>
     <div>
+        <span id="chuj"></span>
         <div id="datePickContainer">
             <p>Get show by date: <span id="showDate"></span></p>
             <div id="datePickSelect">
                 <label>day: </label>
                 <select id="dzien">
+                    <option value="*">ANY</option>
                     <option value="01">1</option>
                     <option value="02">2</option>
                     <option value="03">3</option>
@@ -54,9 +56,9 @@
                     <option value="31">31</option>
                 </select>
 
-
                 <label>month:</label>
                 <select id="miesiac">
+                    <option value="*">ANY</option>
                     <option value="01">january - 1</option>
                     <option value="02">february - 2</option>
                     <option value="03">march - 3</option>
@@ -73,6 +75,7 @@
                 
                 <label>year:</label>
                 <select id="rok">
+                    <option value="*">ANY</option>
                     <option value="1961">1961</option>
                     <option value="1962">1962</option>
                     <option value="1963">1963</option>
@@ -121,6 +124,19 @@
                     <option value="mtx">matrix</option>
                 </select>
 
+                <!-- <label>taper:</label>
+                <datalist id="taperSelect">
+                    <option value="miller">
+                    <option value="hicks">
+                    <option value="seamons">
+                    <option value="dusborne">
+                    <option value="custom">
+                </datalist> -->
+
+                <br>
+
+                <label></label>
+
                 <br>
 
                 <button id="getShowButton" class="formButtons">get show</button>
@@ -133,6 +149,17 @@
                 </button>
                 
             </div>
+        </div>
+
+        <div id="randomShowContainer">
+            <button id="randomShowButton" class="formButtons">get random show</button>
+        </div>
+
+        <div id="todayShowsContainer">
+            shows with today's date:
+             <ul id="todayShowsList">
+
+             </ul>
         </div>
 
         <div id="player">
