@@ -1,20 +1,38 @@
-#playerContent{
+
+
+/* PALETA */
+
+/* #089896, #2A7F84, #F1882D, #EF6145, #A12775 */
+
+
+*{
+    box-sizing: border-box;
+}
+
+html{
+    padding:0;
+}
+
+body{
+    background-color: #A12775;
     
+}
+
+#playerContent{
+    width: 100%;
+    height: 400px;
+    display: none;
+    float: right;
 }
 #pageHeader{
     text-align: center;
     font-family: 'Kanit', sans-serif;
 }
 #player{
-    display: none;
-    float: right;
-    width: 46%;
-    padding:2%
+    
 }
 #datePickContainer{
-    float: left;
-    width: 46%;
-    padding: 2%;
+
 }
 #resultsContainer{
     clear: both;
@@ -33,9 +51,9 @@
 .showRecord{
     transition: .3s;
 }
-.showRecord:hover{
+/* .showRecord:hover{
     background-color: rgb(255, 187, 187);
-}
+} */
 /* 
 #showNotFound{
     display: none;
@@ -51,9 +69,48 @@
 .formButtons{
     cursor: pointer;
 }
+#todayShowsList{
+    margin:0;
+}
 #todayShowsList>li{
     transition: .25s;
 }
 #todayShowsList>li:hover{
     color: rgb(214, 110, 24);
+}
+
+#randomShowContainer{
+
+}
+
+#randomChoiceContainer{
+    
+}
+
+#todayShowsContainer{
+
+}
+
+.selectDiv{
+    background-color: #2A7F84;
+    border: 10px solid #EF6145;
+    box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
+
+    width:33%;
+    float: left;
+    padding:2%;
+}
+.selectDivHeader{
+    margin-top:0;
+    font-size: 1.5rem;
+    font-family: 'Kanit', sans-serif;
+}
+
+.choiceTab{
+    width:33.33%;
+    float:left;
+    background-color: #089896;
+    padding:.5rem;
+    text-align: center;
+    border: 2px solid black;
 }

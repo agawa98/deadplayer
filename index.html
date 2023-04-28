@@ -5,6 +5,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/x-icon" href="/img/icon.jpg">
     
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,8 +18,8 @@
     <h1 id="pageHeader">Dead Player (alpha)</h1>
     <div>
         <span id="chuj"></span>
-        <div id="datePickContainer">
-            <p>Get show by date: <span id="showDate"></span></p>
+        <div id="datePickContainer" class="selectDiv">
+            <p class="selectDivHeader">Get show by date: <span id="showDate"></span></p>
             <div id="datePickSelect">
                 <label>day: </label>
                 <select id="dzien">
@@ -151,19 +152,31 @@
             </div>
         </div>
 
-        <div id="randomShowContainer">
+        <div id="randomShowContainer" class="selectDiv">
+            <p class="selectDivHeader">Get random show from:</p>
+            <div id="randomChoiceContainer">
+                <div id="choiceTabsContainer">
+                    <div id="eraButton" class="choiceTab">given era</div>
+                    <div id="yearButton" class="choiceTab">given year</div>
+                    <div id="allButton" class="choiceTab">all time</div>
+                </div>
+                <div id="choiceContent">
+
+                </div>
+            </div>
+
             <button id="randomShowButton" class="formButtons">get random show</button>
         </div>
 
-        <div id="todayShowsContainer">
-            shows with today's date:
+        <div id="todayShowsContainer" class="selectDiv">
+            <p class="selectDivHeader">Shows with today's date:</p>
              <ul id="todayShowsList">
 
              </ul>
         </div>
 
         <div id="player">
-            <iframe id="playerContent" src="" width="500" height="400" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
+            <iframe id="playerContent" src="" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
         </div>
     </div>
 

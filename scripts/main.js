@@ -6,6 +6,15 @@ let showArray = [["01-11-1965","Grateful Dead Live at various on 1965-11-01"],["
 
 let tempArray = []
 
+let colors = [      //RGB
+    [232,232,75],   //zolty
+    [240,258,53],   //pomaranczowy
+    [95,225,69],    //zielony
+    [69,205,225],   //blekitny
+    [167,102,228],  //lawendowy
+    [229,119,197]   //rozowy
+]
+
 document.getElementById("getNextShow").disabled = true
 document.getElementById("getPrevShow").disabled = true
 
@@ -47,6 +56,38 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
     console.log(res)
     let sortedArray = sorter(res.response)
+
+    //pre-check ile jest rekordow (wiem ze inefficient ale nie chcialo mi sie rozdzielac)
+
+    let numRecords=0  //ile jest rekordow w tabeli
+
+    for(let i=0; i<sortedArray.length; i++){
+
+        if(sortedArray[i].identifier.toLowerCase().includes("sbd")==true||sortedArray[i].identifier.toLowerCase().includes("soundboard")==true||sortedArray[i].identifier.toLowerCase().includes("mtx")==true||sortedArray[i].identifier.toLowerCase().includes("matrix")==true||sortedArray[i].identifier.toLowerCase().includes("aud")==true||sortedArray[i].identifier.toLowerCase().includes("audience")==true||sortedArray[i].identifier.toLowerCase().includes("gd")==true){
+            
+            if(sortedArray[i].identifier.includes(date)==false){
+                console.log("pominalem w counter 3")
+                continue
+            }
+            numRecords++
+        }
+        
+    }
+
+    console.log("numrecs "+numRecords)
+
+
+
+    //setup gradientu
+
+
+
+    let color1 = colors[Math.floor(Math.random()*6)]
+    let color2 = colors[Math.floor(Math.random()*6)]
+
+
+
+
 
     for(let i=0; i<sortedArray.length; i++){
         if(i==0){
@@ -178,6 +219,16 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
             // positionPlayer()
         })
+
+
+        //fajne swiecenie siue juhuuuu     -      i to numer rekordu od gory
+
+        let endColorR = color1[0] + i/numRecords * (color2[0]-color1[0])
+        let endColorG = color1[1] + i/numRecords * (color2[1]-color1[1])
+        let endColorB = color1[2] + i/numRecords * (color2[2]-color1[2])
+
+        tableRow.style.background = "rgb("+endColorR+","+endColorG+","+endColorB+")"
+
 
         document.getElementById("resultsTable").appendChild(tableRow)
 
