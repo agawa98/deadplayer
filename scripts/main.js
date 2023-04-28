@@ -52,6 +52,23 @@ async function fetchShow(date){      // date to data w formacie rrrr-mm-dd
 
 async function tableSetup(res, date){  // res to response z archiva. date data w rrrr-mm-dd
 
+    //jesli wylosowane kolory sa te same, to odpal funkcje od nowa
+
+    let color1ID = Math.floor(Math.random()*6)
+    let color2ID = Math.floor(Math.random()*6)
+
+    if(color1ID==color2ID){
+        tableSetup(res,date)
+        return
+    }
+
+    let color1 = colors[color1ID]
+    let color2 = colors[color2ID]
+
+
+
+
+
     typeFilter = document.getElementById("recordingType").value
 
     console.log(res)
@@ -74,6 +91,7 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
         
     }
 
+    let iterNumRecords = numRecords
     console.log("numrecs "+numRecords)
 
 
@@ -82,9 +100,7 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 
 
-    let color1 = colors[Math.floor(Math.random()*6)]
-    let color2 = colors[Math.floor(Math.random()*6)]
-
+    
 
 
 
@@ -162,7 +178,6 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
         }
 
         //jesli wybreany typ nagrania nie pasuje do typu z pliku to pomin jego dodawaanie do tabelki
-        console.log("ypfilter: "+typeFilter + " / " + audType)
         if(audType!=typeFilter && typeFilter!="any"){
             console.log("pominalem bo typ zly - "+sortedArray[i].title+ " , " + sortedArray[i].identifier)
             continue
@@ -171,8 +186,6 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
         typeCell.textContent = audType
 
 
-
-        console.log("DATA: "+date)
 
         let idCell = document.createElement("td")
         if(sortedArray[i].identifier.includes(date)==false){
@@ -221,16 +234,24 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
         })
 
 
-        //fajne swiecenie siue juhuuuu     -      i to numer rekordu od gory
+        //fajne swiecenie siue juhuuuu   
 
-        let endColorR = color1[0] + i/numRecords * (color2[0]-color1[0])
-        let endColorG = color1[1] + i/numRecords * (color2[1]-color1[1])
-        let endColorB = color1[2] + i/numRecords * (color2[2]-color1[2])
+        console.log("gradient: " + iterNumRecords + "/" + numRecords + "  -  " +iterNumRecords/numRecords)
+
+        let endColorR = color1[0] + iterNumRecords/numRecords * (color2[0]-color1[0])
+        let endColorG = color1[1] + iterNumRecords/numRecords * (color2[1]-color1[1])
+        let endColorB = color1[2] + iterNumRecords/numRecords * (color2[2]-color1[2])
 
         tableRow.style.background = "rgb("+endColorR+","+endColorG+","+endColorB+")"
 
+        iterNumRecords--
+
+
+    
 
         document.getElementById("resultsTable").appendChild(tableRow)
+
+        
 
         
     }
