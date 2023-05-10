@@ -76,7 +76,7 @@ body{
     transition: .25s;
 }
 #todayShowsList>li:hover{
-    color: rgb(214, 110, 24);
+    color: rgb(224, 196, 105);
 }
 
 #randomShowContainer{
@@ -109,8 +109,20 @@ body{
 .choiceTab{
     width:33.33%;
     float:left;
-    background-color: #089896;
+    background-color: #eb9f5c;
     padding:.5rem;
     text-align: center;
     border: 2px solid black;
+    user-select: none;
+    cursor: pointer;
+}
+
+#yearContent, #eraContent{
+    display: none;
+}
+
+
+
+.choiceActive{
+    background-color:#e7735c;
 }

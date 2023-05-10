@@ -67,6 +67,8 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 
 
+    document.getElementById("playerContent").style.display = "none"
+
 
 
     typeFilter = document.getElementById("recordingType").value
@@ -188,7 +190,8 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 
         let idCell = document.createElement("td")
-        if(sortedArray[i].identifier.includes(date)==false){
+        console.log("data: "+date)
+        if(sortedArray[i].identifier.includes(date.slice(2))==false){
             console.log("pominalem bo data zla - "+sortedArray[i].title+ " , " + sortedArray[i].identifier)
             continue
         }
@@ -218,7 +221,9 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
             console.log(el.target.parentNode.getElementsByClassName("IDCell")[0].textContent)
             showID = el.target.parentNode.getElementsByClassName("IDCell")[0].textContent
             document.getElementById("playerContent").src = "https://archive.org/embed/"+showID+"&playlist=1"
-            document.getElementById("player").style.display = "block"
+            document.getElementById("playerContent").style.display = "block"
+
+            console.log("https://archive.org/embed/"+showID+"&playlist=1")
 
             try{
                 document.getElementsByClassName("tableRowActive")[0].classList.remove("tableRowActive")
@@ -322,14 +327,67 @@ async function getShowByDate(date){
     // document.getElementById("showNotFound").style.display = "none"
 }
 
-async function getRandomShow(){
+async function getRandomShow(filter){
     
     clear()
 
-    
+    let randomDate
 
-    let randomDate = showArray[Math.floor(Math.random()*showArray.length)][0]
-    randomDate = dateConverter(randomDate)
+    //alltime
+    if(filter==undefined){
+        randomDate = dateConverter(showArray[Math.floor(Math.random()*showArray.length)][0])
+    }
+
+    //eras
+    else if(isNaN(filter)==true){
+
+        //zmeinna trzymajaca loopa w calosci
+        let loop = true
+
+        let startYear, endYear
+
+        if(filter=="pigpen"){
+            startYear = 1965
+            endYear = 1971
+        }else if(filter=="keith"){
+            startYear = 1972
+            endYear = 1979
+        }else if(filter=="brent"){
+            startYear = 1980
+            endYear = 1990
+        }else if(filter=="vince"){
+            startYear = 1991
+            endYear = 1995
+        }else if(filter=="bruce"){
+            startYear = 1991
+            endYear = 1992
+        }
+
+        while(loop==true){
+            randomDate = dateConverter(showArray[Math.floor(Math.random()*showArray.length)][0])
+            
+            if(Number(randomDate.slice(0,4))>=startYear && Number(randomDate.slice(0,4))<=endYear){
+                console.log("found " + randomDate)
+
+                loop=false
+            }
+        }
+    }
+
+    else if(isNaN(filter)==false){
+        let loop = true
+
+        while(loop==true){
+            
+            randomDate = dateConverter(showArray[Math.floor(Math.random()*showArray.length)][0])
+            console.log("seraching")
+            if(Number(randomDate.slice(0,4))==filter){
+
+                loop = false
+            }
+        }
+    }
+    
 
     console.log("show "+randomDate)
     dzien = randomDate.slice(8,10)
@@ -457,7 +515,7 @@ async function getPrevNextShow(direction){  // direction - szukamy w tyl czy w p
         }
     }
 
-    if(dzien.length==1){
+    if(dzien.toString().length==1){
         dzien = "0"+dzien
     }
 
@@ -523,7 +581,6 @@ function clear(){
     document.getElementById("playerContent").src = ""
 }
 
-
 //retired
 function positionPlayer(){
     console.log("sdsda")
@@ -549,6 +606,24 @@ function positionPlayer(){
     
 }
 
+function disableAllChoices(){
+    for(let i=0; i<3; i++){
+        document.getElementsByClassName("choiceContent")[i].style.display = "none";
+        document.getElementsByClassName("choiceTab")[i].classList.remove("choiceActive")
+    }
+}
+
+for(let i=0; i<3; i++){
+    let btnID = document.getElementsByClassName("choiceTab")[i].id
+    let tabID = btnID.slice(0,btnID.indexOf("Button"))+"Content"
+    console.log(tabID)
+    document.getElementById(btnID).addEventListener("click",()=>{
+        disableAllChoices()
+        document.getElementById(btnID).classList.add("choiceActive")
+        console.log("asd")
+        document.getElementById(tabID).style.display = "block"
+    })
+}
 
 document.getElementById("getPrevShow").addEventListener("click", async ()=>{
     direction = "prev"
@@ -567,9 +642,19 @@ document.getElementById("getShowButton").addEventListener("click", async ()=>{
     getShowByDate(setDate())
 })
 
-document.getElementById("randomShowButton").addEventListener("click", async ()=>{
+document.getElementById("allChoiceButton").addEventListener("click", async ()=>{
     loading()
     getRandomShow()
+})
+
+document.getElementById("eraChoiceButton").addEventListener("click", async ()=>{
+    loading()
+    getRandomShow(document.getElementById("eraSelect").value)
+})
+
+document.getElementById("yearChoiceButton").addEventListener("click", async ()=>{
+    loading()
+    getRandomShow(document.getElementById("yearSelect").value)
 })
 
 window.onload = ()=>{
