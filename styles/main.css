@@ -126,3 +126,10 @@ body{
 .choiceActive{
     background-color:#e7735c;
 }
+
+
+@media(max-width: 768px){
+    .selectDiv{
+        width:100%;
+    }
+}

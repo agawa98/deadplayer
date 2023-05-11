@@ -19,7 +19,7 @@
     <div>
         <span id="chuj"></span>
         <div id="datePickContainer" class="selectDiv">
-            <p class="selectDivHeader">Get show by date: <span id="showDate"></span></p>
+            <p class="selectDivHeader">Get show by date:</p>
             <div id="datePickSelect">
                 <label>day: </label>
                 <select id="dzien">
@@ -120,15 +120,6 @@
                     <option value="mtx">matrix</option>
                 </select>
 
-                <!-- <label>taper:</label>
-                <datalist id="taperSelect">
-                    <option value="miller">
-                    <option value="hicks">
-                    <option value="seamons">
-                    <option value="dusborne">
-                    <option value="custom">
-                </datalist> -->
-
                 <br>
 
                 <label></label>
@@ -225,14 +216,15 @@
              </ul>
         </div>
 
-        <div id="player">
-            <iframe id="playerContent" src="" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-        </div>
+        
     </div>
 
     <div id="resultsContainer">
-        <div id="showNotFound">
-            
+        <h2 id="showDate" class="selectDivHeader">
+
+        </h2>
+        <div id="player">
+            <iframe id="playerContent" src="" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
         </div>
         <table id="resultsTable">
             <img src="img/uncleSam.gif" id="uncleSamGif">

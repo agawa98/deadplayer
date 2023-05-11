@@ -39,7 +39,7 @@ async function fetchShow(date){      // date to data w formacie rrrr-mm-dd
     
     console.log(query)
 
-    document.getElementById("showDate").textContent = rok+"-"+miesiac+"-"+dzien
+    
 
     let data = await fetch(query)
     let res = await data.json()
@@ -190,7 +190,6 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 
         let idCell = document.createElement("td")
-        console.log("data: "+date)
         if(sortedArray[i].identifier.includes(date.slice(2))==false){
             console.log("pominalem bo data zla - "+sortedArray[i].title+ " , " + sortedArray[i].identifier)
             continue
@@ -225,6 +224,44 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
             console.log("https://archive.org/embed/"+showID+"&playlist=1")
 
+
+            let dayOfTheWeek = new Date(rok+"-"+miesiac+"-"+dzien).getDay()
+
+            console.log("dataAAAAAAAA "+rok+"/"+miesiac+"/"+dzien)
+
+            console.log(dayOfTheWeek)
+
+            switch(dayOfTheWeek){
+                case 0:
+                    dayOfTheWeek = "Sunday"
+                    break
+                case 1:
+                    dayOfTheWeek = "Monday"
+                    break
+                case 2:
+                    dayOfTheWeek = "Tuesday"
+                    break
+                case 3:
+                    dayOfTheWeek = "Wednesday"
+                    break
+                case 4:
+                    dayOfTheWeek = "Thursday"
+                    break
+                case 5:
+                    dayOfTheWeek = "Friday"
+                    break
+                case 6:
+                    dayOfTheWeek = "Saturday"
+                    break
+                
+            }
+
+            console.log(dayOfTheWeek)
+
+
+
+            document.getElementById("showDate").textContent = sortedArray[i].title.slice(21) + ", " + dayOfTheWeek
+
             try{
                 document.getElementsByClassName("tableRowActive")[0].classList.remove("tableRowActive")
             }catch{
@@ -240,8 +277,6 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 
         //fajne swiecenie siue juhuuuu   
-
-        console.log("gradient: " + iterNumRecords + "/" + numRecords + "  -  " +iterNumRecords/numRecords)
 
         let endColorR = color1[0] + iterNumRecords/numRecords * (color2[0]-color1[0])
         let endColorG = color1[1] + iterNumRecords/numRecords * (color2[1]-color1[1])
@@ -579,6 +614,7 @@ function clear(){
 
     document.getElementById("resultsTable").innerHTML = ""
     document.getElementById("playerContent").src = ""
+    document.getElementById("showDate").textContent = ""
 }
 
 //retired
