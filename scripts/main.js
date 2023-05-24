@@ -1,4 +1,9 @@
 
+window.onbeforeunload = function() {
+    return 'czy na pewno chcesz zamknac odtwarzacz?';
+};
+
+
 let dzien, miesiac, rok, typeFilter, sortBy, showID, direction, newArray, date
 let loadingToggle = false
 
@@ -448,7 +453,7 @@ async function getTodayShows(){
         day = "0"+todayobj.getDate()
     }
 
-
+    let showcount = 0
     //szukanie matchy dla dzisiaj
 
     for(let i=0;i<showArray.length;i++){ //showArray jest w formacie dd mm rrrr
@@ -465,7 +470,7 @@ async function getTodayShows(){
 
             li.textContent = showArray[i][0] + ", " + venueString
 
-            li.classList.add("formButtons")
+            li.classList.add("todayShowLink")
 
             li.addEventListener("click",async ()=>{
                 loading()
@@ -476,8 +481,13 @@ async function getTodayShows(){
             })
 
             document.getElementById("todayShowsList").appendChild(li)
+            showcount++
         }
         
+    }
+
+    if(showcount==0){
+        document.getElementById("todayShowsLinkContainer").innerText = "There were no shows played on this date (wow)"
     }
 
 
@@ -498,6 +508,9 @@ function loading(){
         for(let i=0;i<document.getElementsByClassName("formButtons").length;i++){
             document.getElementsByClassName("formButtons")[i].disabled = true
         }
+        for(let i=0;i<document.getElementsByClassName("todayShowLink").length;i++){
+            document.getElementsByClassName("todayShowLink")[i].style.pointerEvents = "none"
+        }
         loadingToggle=true
         
     }else if(loadingToggle==true){
@@ -505,6 +518,9 @@ function loading(){
         //wlaczenie przyciskow 
         for(let i=0;i<document.getElementsByClassName("formButtons").length;i++){
             document.getElementsByClassName("formButtons")[i].disabled = false
+        }
+        for(let i=0;i<document.getElementsByClassName("todayShowLink").length;i++){
+            document.getElementsByClassName("todayShowLink")[i].style.pointerEvents = "auto"
         }
         loadingToggle=false
     }

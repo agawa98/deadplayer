@@ -78,7 +78,9 @@ body{
 #todayShowsList>li:hover{
     color: rgb(224, 196, 105);
 }
-
+.todayShowLink{
+    cursor: pointer;
+}
 #randomShowContainer{
 
 }
