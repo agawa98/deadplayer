@@ -36,9 +36,21 @@ function dateConverter(badDate){           //konwertuje z dd-mm-rrrr na rrrr-mm-
     return badDate.slice(6,10)+"-"+badDate.slice(3,5)+"-"+badDate.slice(0,2)
 }
 
-async function fetchShow(date){      // date to data w formacie rrrr-mm-dd
+function badDateConverter(goodDate){            //konwertuje z rrrr-mm-dd na dd-mm-rrrr    1992-1-1
 
+    if(goodDate[6]=="-"){
+        goodDate = goodDate.slice(0,5)+"0"+goodDate.slice(5,goodDate.length)       // 1992-01-1
+    }
+    if(goodDate[9] == null){
+        goodDate = goodDate.slice(0,8) + "0" + goodDate.slice(8,goodDate.length)        // tu dodaje zera standaryzuje length
+    }
+    
+    let badDate = goodDate.slice(8,10)+"-"+goodDate.slice(5,7)+"-"+goodDate.slice(0,4) // 02-1-1992
 
+    return badDate
+}
+
+async function fetchShow(date){      // date to data w formacie rrrr-mm-dd    fetch show fetchuje idenifiery i wgl, a getshowbydate
 
     let query = "https://archive.org/advancedsearch.php?q=grateful+dead+"+date+"&fl%5B%5D=avg_rating&fl%5B%5D=downloads&fl%5B%5D=identifier&fl%5B%5D=title&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=100&page=1&output=json&save=yes"
     
@@ -324,7 +336,36 @@ async function tableSetup(res, date){  // res to response z archiva. date data w
 
 }
 
-async function getShowByDate(date){
+function doWeHaveThisDate(date){        // sprawdza czy show z input fieldow jest w naszym showarray, useful przy szukaniu next/prev show
+
+    let badDate = badDateConverter(date)
+
+    for(let i=0; i<showArray.length; i++){
+        console.log("do we? "+badDate)
+        
+        // console.log(showArray[i][0].slice(6,10) + ">" + badDate.slice(6,10) + "?")
+
+        if(Number(showArray[i][0].slice(6,10))>Number(badDate.slice(6,10))){
+            console.log("skip")
+            return false
+        }
+
+        if(showArray[i][0]==badDate){
+            return true
+        }
+    }
+
+    return false
+}
+
+async function getShowByDate(date){ // fetch show fetchuje idenifiery i wgl, a getshowbydate jest parentem fetchshow i to on go wywoluje
+
+    if(direction != null){
+        if(doWeHaveThisDate(date)==false){
+            getPrevNextShow(direction)
+            return
+        }
+    }
 
     console.log("---------START "+dzien+"-"+miesiac+"-"+rok)
 
@@ -568,6 +609,10 @@ async function getPrevNextShow(direction){  // direction - szukamy w tyl czy w p
 
     if(dzien.toString().length==1){
         dzien = "0"+dzien
+    }
+
+    if(miesiac.toString().length==1){
+        miesiac = "0"+miesiac
     }
 
 
