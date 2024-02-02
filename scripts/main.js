@@ -67,6 +67,57 @@ async function fetchShow(date){      // date to data w formacie rrrr-mm-dd    fe
     return res
 }
 
+async function fetchSongs(){
+
+    let songArray = [[],[]]  // 0 - ID,   1 - title
+    
+    let query = "https://archive.org/metadata/"+showID
+
+    let data = await fetch(query)
+    let res = await data.json()
+
+    console.log(res.files)
+
+    for(let i = 0; i < res.files.length; i++){  //najpierw flac potem shn potem mp3
+
+        if(res.files[i].format.toLowerCase() != "flac" && res.files[i].format.toLowerCase() != "shorten" && res.files[i].format.toLowerCase() != "vbr mp3"){
+            
+            continue
+        }
+
+        if(res.files[i].format.toLowerCase() == "flac"){
+            
+            songArray[songArray.length][0] = res.files[i].name
+
+            songArray[songArray.length][1] = res.files[i].title
+
+            continue
+        }
+
+
+
+        if(res.files[i].format.toLowerCase() == "shorten"){
+
+            songArray[songArray.length][0] = res.files[i].name
+
+            songArray[songArray.length][1] = res.files[i].title
+
+            continue
+        }
+
+        console.log("petlllaa " + i)
+
+        if(res.files[i].format.toLowerCase() == "vbr mp3"){
+
+            songArray[songArray.length][0] = res.files[i].name
+
+            songArray[songArray.length][1] = res.files[i].title
+        }
+    }
+
+    return songArray
+}
+
 async function tableSetup(res, date){  // res to response z archiva. date data w rrrr-mm-dd
 
     //jesli wylosowane kolory sa te same, to odpal funkcje od nowa
