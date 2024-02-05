@@ -224,10 +224,13 @@
     <div id="resultsContainer">
         <h2 id="showDate" class="selectDivHeader">
 
-        </h2>
-        <div id="player">
+        </h2><a id="showLink" target="_blank"></a>
+        <table id="songTable">
+
+        </table>
+        <!-- <div id="player">
             <iframe id="playerContent" src="" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen></iframe>
-        </div>
+        </div> -->
         <table id="resultsTable">
             <img src="img/uncleSam.gif" id="uncleSamGif">
         </table>
@@ -235,6 +238,22 @@
 
     <div id="arrayContainer">
         
+    </div>
+
+    <div id="mediaPlayer">
+        <audio id="currentSong"></audio>
+        <audio id="preloadSong" preload="auto"></audio>
+        <div id="infoDiv" class="">
+            Piosenka
+        </div>
+        <div id="progressDiv">
+
+        </div>
+        <div id="controlDiv">
+            <button id="prevButton"> < </button>
+            <button id="pausePlayButton"> ▶ </button>
+            <button id="nextButton"> > </button>
+        </div>
     </div>
 
 
