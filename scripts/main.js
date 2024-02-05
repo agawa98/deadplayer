@@ -78,62 +78,11 @@ async function fetchSongs(){
     let data = await fetch(query)
     let res = await data.json()
 
-
-
-
-
-    //       FLAC AND SHN SUPPORT DOWN BELOW VVVVV
-
-
-
-    // let fileType = ""       // zmeinna dyktujaca jaki filetype jest najlepszy w show, i potem yulko ten filetype jest dodawanay do arraya
-
-    // if(showID.includes("flac") == true){
-    //     fileType = "flac"
-    // }
-    // if(showID.includes("shnf") == true){
-    //     fileType = "shorten"
-    // }
-
-    for(let i = 0; i < res.files.length; i++){  //najpierw flac potem shn potem mp3
+    for(let i = 0; i < res.files.length; i++){ 
 
         if(res.files[i].length == null){  // skipuje pliki ktore nie maja length, mozliwe ze to wypeirdala tez piosenki
             continue
         }
-
-    //     if(res.files[i].name.toLowerCase().includes(".flac") == true && fileType == "flac"){
-            
-    //         songArray[0].push(res.files[i].name)
-
-    //         songArray[1].push(res.files[i].title)
-
-    //         songArray[2].push(res.files[i].length)
-
-    //         continue
-    //     }
-
-    //     if(res.files[i].name.toLowerCase().includes(".shn") == true && fileType == "shorten"){
-
-    //         songArray[0].push(res.files[i].name)
-
-    //         songArray[1].push(res.files[i].title)
-
-    //         songArray[2].push(res.files[i].length)
-
-    //         continue
-    //     }
-
-    //     if(res.files[i].name.toLowerCase().includes(".mp3") == true && fileType == ""){
-
-    //         songArray[0].push(res.files[i].name)
-
-    //         songArray[1].push(res.files[i].title)
-
-    //         songArray[2].push(res.files[i].length)
-
-    //     }
-    // }
-
 
         if(res.files[i].name.toLowerCase().includes(".mp3") == true){
 
@@ -146,8 +95,14 @@ async function fetchSongs(){
         }
     }
 
-
     console.log(songArray)
+
+    if(songArray[2][0].includes(":")==false){
+        console.log("przeksztalcam czasy")
+        for(let i=0; i<songArray[0].length; i++){
+            songArray[2][i] = secondToMinute(songArray[2][i])
+        }
+    }
 
     return songArray
 }
@@ -464,7 +419,6 @@ async function setupSongTable(){
         tabelka.append(tableRow)
     }
 
-    console.log(tabelka)
 }
 
 function doWeHaveThisDate(date){        // sprawdza czy show z input fieldow jest w naszym showarray, useful przy szukaniu next/prev show
@@ -874,6 +828,10 @@ let infoDiv = document.getElementById("infoDiv")
 
 let currentSongID = 0
 
+document.getElementById("volumeControl").addEventListener("change", ()=>{
+    currentSong.volume = document.getElementById("volumeControl").value
+})
+
 document.getElementById("prevButton").addEventListener("click", ()=>{
     if(currentSong.currentTime<5 && currentSongID!=0){
         // currentSong.pause()
@@ -904,12 +862,38 @@ document.getElementById("pausePlayButton").addEventListener("click", ()=>{
     }
 })
 
+document.getElementById("rewind10").addEventListener("click", ()=>{
+    if(currentSong.currentTime>10){
+        currentSong.currentTime-=10
+    }
+})
+
+document.getElementById("skip10").addEventListener("click", ()=>{
+    if(currentSong.currentTime<minuteToSecond(songArray[2][currentSongID])-11){
+        currentSong.currentTime+=10
+    }
+})
+
 currentSong.addEventListener("ended", ()=>{
     currentSongID++
     startSong(songArray[0][currentSongID], currentSongID)
 
 
 })
+
+function minuteToSecond(minute){    // z 4:40 do 280
+    return Number(minute.slice(0, minute.indexOf(":"))) * 60 + Number(minute.slice(minute.indexOf(":")+1))
+}
+
+function secondToMinute(seconds){       // z 280 do 4:40
+    let secs = Math.floor(seconds % 60)
+
+    if(secs < 10){                // doddawawnie 0 przed sekuyndami 0:04 zamiast 0:4
+        secs = "0" + secs
+    }
+
+    return Math.floor(seconds/60) + ":" + secs
+}
 
 function startSong(songID, tableOrder){
     currentSong.src = "https://archive.org/download/"+showID+"/"+songID
@@ -921,6 +905,9 @@ function startSong(songID, tableOrder){
     if(songArray[0].length-1 > currentSongID){
         preloadNextSong()
     }
+
+    document.getElementById("totalTime").textContent = songArray[2][currentSongID]
+    document.getElementById("songProgressBar").max = minuteToSecond(songArray[2][currentSongID])
 
     playSong()
 }
@@ -934,7 +921,7 @@ function preloadNextSong(){
 
 function playSong(){
     currentSong.play()
-    document.getElementById("pausePlayButton").textContent = "II"
+    document.getElementById("pausePlayButton").textContent = " II "
 
     infoDiv.textContent = songArray[1][currentSongID]
     timeKeeper()
@@ -942,18 +929,14 @@ function playSong(){
 
 function stopSong(){
     currentSong.pause()
-    document.getElementById("pausePlayButton").textContent = "▶"
+    document.getElementById("pausePlayButton").textContent = " ▶ "
 }
 
 function timeKeeper(){
-    let secs = Math.floor(currentSong.currentTime % 60)
 
-    if(secs < 10){                // doddawawnie 0 przed sekuyndami 0:04 zamiast 0:4
-        secs = "0" + secs
-    }
+    document.getElementById("currentTime").textContent = secondToMinute(currentSong.currentTime)
 
-    let currentTime = Math.floor(currentSong.currentTime/60) + ":" + secs
-    progressDiv.textContent = currentTime + " - " + songArray[2][currentSongID]
+    document.getElementById("songProgressBar").value = Math.floor(currentSong.currentTime)
 
     if(currentSong.paused == false){
         setTimeout(timeKeeper, 1000)

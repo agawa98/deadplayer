@@ -148,6 +148,7 @@ body{
 
 #mediaPlayer > div{
     border:2px solid rgb(0, 99, 0);
+    padding: 1em;
 }
 
 #infoDiv{
@@ -157,13 +158,40 @@ body{
 
 #progressDiv{
     float: left;
-    width: 38%;
+    width: 40%;
+}
+
+#currentTime{
+    width: 10%;
+    float: left;
+    text-align: center;
+}
+
+#songProgressBar{
+    width: 80%;
+    float: left;
+}
+
+#totalTime{
+    width: 10%;
+    float: left;
+    text-align: center;
 }
 
 #controlDiv{
     float:left;
     width: 30%;
     text-align: center;
+}
+
+#volumeDiv{
+    width: 30%;
+    float: left;
+}
+
+#buttonsDiv{
+    width: 70%;
+    float:right;
 }
 
 #songTable{
@@ -180,4 +208,8 @@ body{
 
 #currentSong{
     display: none;
+}
+
+#spaceMaker{
+    height: 10vh;
 }
