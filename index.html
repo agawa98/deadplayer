@@ -247,15 +247,26 @@
             Piosenka
         </div>
         <div id="progressDiv">
-
+            <span id="currentTime">--:--</span>
+            <progress id="songProgressBar" value="" max=""></progress>
+            <span id="totalTime">--:--</span>
         </div>
         <div id="controlDiv">
-            <button id="prevButton"> < </button>
-            <button id="pausePlayButton"> ▶ </button>
-            <button id="nextButton"> > </button>
+            <div id="volumeDiv">
+                🔈 <input type="range" id="volumeControl" min="0" max="1" step = "0.05">
+            </div>
+            <div id="buttonsDiv">
+                <button id="rewind10"><<10<<</button>
+                <button id="prevButton"> < </button>
+                <button id="pausePlayButton"> ▶ </button>
+                <button id="nextButton"> > </button>
+                <button id="skip10">>>10>></button>
+            </div>
         </div>
     </div>
+    <div id="spaceMaker"></div>
 
+    
 
     <script src="scripts/main.js"></script>
 
