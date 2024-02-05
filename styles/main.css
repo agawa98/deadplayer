@@ -135,3 +135,49 @@ body{
         width:100%;
     }
 }
+
+
+#mediaPlayer{
+    width: 100vw;
+    position: fixed;
+    bottom: 0;
+    left:0;
+    background-color: rgb(49, 49, 49);
+    color:white;
+}
+
+#mediaPlayer > div{
+    border:2px solid rgb(0, 99, 0);
+}
+
+#infoDiv{
+    float:left;
+    width:30%;
+}
+
+#progressDiv{
+    float: left;
+    width: 38%;
+}
+
+#controlDiv{
+    float:left;
+    width: 30%;
+    text-align: center;
+}
+
+#songTable{
+    border-collapse: collapse;
+    background-color: rgb(255, 166, 0);
+    color: black;
+}
+
+#songTable > tr > td{
+    background-color: orange;
+    border: 1px white solid;
+    padding: .5em;
+}
+
+#currentSong{
+    display: none;
+}
