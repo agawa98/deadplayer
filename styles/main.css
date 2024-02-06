@@ -40,32 +40,32 @@ body{
 }
 #resultsTable{
     border-collapse: collapse;
+    float: left;
+    width: 40vw;
 }
 #resultsTable>tr>td{
     border: 2px solid #fa1f0f;
     padding: .5rem
 }
-#resultsTable>tr{
+#resultsTable>tr, #songTable>tr{
     cursor: pointer;
 }
-.showRecord{
-    transition: .3s;
+#resultsTable :hover{
+    background-color: rgb(255, 239, 169) !important;     /* nie wiem czemu tutaj trzeba important ale inaczej highlightuje tylko cell*/
 }
-/* .showRecord:hover{
-    background-color: rgb(255, 187, 187);
-} */
-/* 
+.tableRowActive{
+    background-color: rgb(255, 208, 0) !important;
+}
+
 #showNotFound{
     display: none;
-} */
+} 
 
 #uncleSamGif{
     height:0;
     transition: .4s;
 }
-.tableRowActive{
-    background-color: rgb(255, 208, 208);
-}
+
 .formButtons{
     cursor: pointer;
 }
@@ -198,6 +198,7 @@ body{
     border-collapse: collapse;
     background-color: rgb(255, 166, 0);
     color: black;
+    float: left;
 }
 
 #songTable > tr > td{
@@ -212,4 +213,16 @@ body{
 
 #spaceMaker{
     height: 10vh;
+    clear: both;
+}
+
+#arrow{
+    float: left;
+    width: 1.5em;
+    color: white;
+    font-weight: 800;
+    font-size: 1.5em;
+    height: 1000px;
+    position:relative;
+    top:100px;
 }
