@@ -123,8 +123,6 @@ body{
     display: none;
 }
 
-
-
 .choiceActive{
     background-color:#e7735c;
 }
@@ -225,4 +223,19 @@ body{
     height: 1000px;
     position:relative;
     top:100px;
+}
+
+#queueDiv{
+    position: fixed;
+}
+
+#queueTable{
+    background-color: rgb(63, 63, 63);
+    border-collapse: collapse;
+}
+
+#queueTable > tr > td{
+    border: 1px white solid;
+    color: white;
+    padding: .3em .5em;
 }
