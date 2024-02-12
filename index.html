@@ -251,7 +251,7 @@
             <progress id="songProgressBar" value="" max=""></progress>
             <span id="totalTime">--:--</span>
         </div>
-        <div id="controlDiv">
+        <div id="controlDiv">     <!-- zindex 100 -->
             <div id="volumeDiv">
                 🔈 <input type="range" id="volumeControl" min="0" max="1" step = "0.05">
             </div>
@@ -265,7 +265,10 @@
         </div>
     </div>
 
-    <div id="queueDiv">
+    <div id="queueDiv">                     <!-- zindex: 10 -->
+        <div id="queueDivCollapseButton">
+            \/ collapse \/
+        </div>
         <table id="queueTable">
             
         </table>

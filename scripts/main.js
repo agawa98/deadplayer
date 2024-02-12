@@ -3,6 +3,9 @@ window.onbeforeunload = function() {
     return 'czy na pewno chcesz zamknac odtwarzacz?';
 };
 
+window.onresize = ()=>{
+    queuePositioner()
+}
 
 let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date
 let loadingToggle = false
@@ -933,8 +936,7 @@ function startSong(currShowID, songID, tableOrder){
 
 
     if(currShowID.includes("/") == true){    //odpala sie tylko gdy piosenka jest queued
-
-        
+ 
 
         currentSong.src = "https://archive.org/download/"+currShowID
       
@@ -942,9 +944,6 @@ function startSong(currShowID, songID, tableOrder){
         document.getElementById("songProgressBar").max = minuteToSecond(queueArray[2][0])
         infoDiv.textContent = queueArray[1][0]
 
-
-        
-        
 
         playSong()
 
@@ -1007,18 +1006,33 @@ let queueDiv = document.getElementById("queueDiv")
 
 let queueTable = document.getElementById("queueTable")
 
+let queueCollapsed = false
+
 function queuePositioner(){
+
     let controlDivHeight = document.getElementById("controlDiv").offsetHeight
     document.getElementById("queueDiv").style.bottom = controlDivHeight + "px"
+
 }
 
 function queueAddFunc(showSongID, songName, songLength){
+
+    if(queueArray[0].length > 20){
+        alert("too many songs in the queue!!!")
+        return
+    }
+
+    document.getElementById("queueDivCollapseButton").style.display = "block"
 
     queueArray[0].push(showSongID)
     queueArray[1].push(songName)
     queueArray[2].push(songLength)
 
     addToQueueTable()
+
+    if(queueCollapsed == true){
+        collapseExpandQueue(true)       // updatenij kolejke zeby sie przesunela w dol o wysokosc jednego rekordu jesli jest schowana
+    }
 }
 
 function addToQueueTable(){
@@ -1057,6 +1071,8 @@ function removeFromQueue(queueID){
 
     document.getElementById(queueID).remove()
 
+    
+
     for(let i = 0; i < queueArray[0].length; i++){
         if(queueArray[3][i] == queueID){
 
@@ -1067,4 +1083,54 @@ function removeFromQueue(queueID){
             queueArray[3].splice(i, 1)
         }
     }
+
+    if(queueArray[0].length == 0){
+        document.getElementById("queueDivCollapseButton").style.display = "none"
+    }
 }
+
+function collapseExpandQueue(update){
+
+    let bottomValue = queueDiv.style.bottom.toString()
+
+    let controlDivHeight = document.getElementById("controlDiv").offsetHeight
+
+    if(update != null && queueCollapsed == true){
+
+        queueDiv.style.bottom = queueDiv.style.bottom - document.getElementById("queueTable").children[0].offsetHeight + "px"
+
+        return
+    }
+
+    if(queueCollapsed == true){
+
+        queueDiv.style.bottom = controlDivHeight + "px"
+
+        document.getElementById("queueDivCollapseButton").textContent = "\\/ collapse \\/"
+
+        queueCollapsed = false
+
+        return
+    }
+
+    if(queueCollapsed == false){
+    
+        queueDiv.style.bottom = controlDivHeight - queueTable.offsetHeight + "px"
+
+        document.getElementById("queueDivCollapseButton").textContent = "/\\ expand /\\"
+
+        queueCollapsed = true
+
+        return
+    }
+
+    
+
+
+}
+
+document.getElementById("queueDivCollapseButton").addEventListener("click", ()=>{
+    collapseExpandQueue()
+})
+
+queuePositioner()
