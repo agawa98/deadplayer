@@ -228,7 +228,7 @@ body{
 
 #queueDiv{
     position: fixed;
-    transition: .5s;
+    transition-duration: .5s;
     transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
     z-index: 10;
     user-select: none;

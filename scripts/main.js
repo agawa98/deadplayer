@@ -7,7 +7,7 @@ window.onresize = ()=>{
     queuePositioner()
 }
 
-let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date
+let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date, venueName
 let loadingToggle = false
 
 let songArray = [[],[],[]]  // 0 - ID,   1 - title,   2 - length
@@ -193,6 +193,8 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             break
         
     }
+
+    venueName = sortedArray[0].title.slice(21)
 
     document.getElementById("showDate").textContent = sortedArray[0].title + ", " + dayOfTheWeek
 
@@ -853,34 +855,26 @@ let infoDiv = document.getElementById("infoDiv")
 
 let currentSongID = 0
 
+let skipTuning = false
+
+document.getElementById("skipTuning").addEventListener("click", ()=>{
+
+    skipTuning = document.getElementById("skipTuning").checked
+})
+
 document.getElementById("volumeControl").addEventListener("change", ()=>{
+
     currentSong.volume = document.getElementById("volumeControl").value
 })
 
 document.getElementById("prevButton").addEventListener("click", ()=>{
-    if(currentSong.currentTime<5 && currentSongID!=0){
-        // currentSong.pause()
-
-        //if currsongid <0 then play currsongid0
-        startSong(currentShowID,songArray[0][currentSongID-1], currentSongID-1)
-        
-    }
-    if(currentSong.currentTime>=5){
-
-        startSong(currentShowID, songArray[0][currentSongID], currentSongID)
-    }
+    
+    previousSong()
 })
 
 document.getElementById("nextButton").addEventListener("click", ()=>{
 
-    if(queueArray[0].length > 0){
-        startSong(queueArray[0][0],queueArray[1][0],queueArray[2][0])
-        return
-    }
-
-    if(currentSongID!=songArray[0].length-1)
-
-    startSong(currentShowID,songArray[0][currentSongID+1], currentSongID+1)
+    nextSong()
 })
 
 document.getElementById("pausePlayButton").addEventListener("click", ()=>{
@@ -911,8 +905,18 @@ currentSong.addEventListener("ended", ()=>{
         return
     }
 
-    currentSongID++
-    startSong(currentShowID, songArray[0][currentSongID], currentSongID)
+
+    if(skipTuning == true){
+        if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true){
+            
+            console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
+            startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)
+            return
+        }
+    }
+    
+
+    startSong(currentShowID, songArray[0][currentSongID+1], currentSongID+1)
 
     
 
@@ -963,9 +967,59 @@ function startSong(currShowID, songID, tableOrder){
 
     document.getElementById("totalTime").textContent = songArray[2][currentSongID]
     document.getElementById("songProgressBar").max = minuteToSecond(songArray[2][currentSongID])
-    infoDiv.textContent = songArray[1][currentSongID]
+    infoDiv.textContent = songArray[1][currentSongID]       // song name
+
+
+    // notify player 
+
+    if(notifyPlayerSupport == true){
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: infoDiv.textContent,
+            artist: "Grateful Dead",
+            album: venueName,
+            artwork:[
+                {src : "../img/notifyTemp.jpg", type : "image/png"}
+            ]
+        })
+    }
 
     playSong()
+}
+
+function previousSong(){
+    if(currentSong.currentTime<5 && currentSongID!=0){
+        // currentSong.pause()
+
+        //if currsongid <0 then play currsongid0
+        startSong(currentShowID,songArray[0][currentSongID-1], currentSongID-1)
+        
+    }
+    if(currentSong.currentTime>=5){
+
+        startSong(currentShowID, songArray[0][currentSongID], currentSongID)
+    }
+}
+
+function nextSong(){
+    if(queueArray[0].length > 0){
+        startSong(queueArray[0][0],queueArray[1][0],queueArray[2][0])
+        return
+    }
+
+    if(currentSongID!=songArray[0].length-1){
+
+        if(skipTuning == true){
+            if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true){
+            
+                console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
+                startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)
+                return
+            }
+        }
+
+        startSong(currentShowID,songArray[0][currentSongID+1], currentSongID+1)
+    }
 }
 
 function preloadNextSong(){
@@ -1097,7 +1151,14 @@ function collapseExpandQueue(update){
 
     if(update != null && queueCollapsed == true){
 
-        queueDiv.style.bottom = queueDiv.style.bottom - document.getElementById("queueTable").children[0].offsetHeight + "px"
+
+        queueDiv.style.transitionDuration = "0s"    // dodawanie do queue gdy jest zamknieta. wylaczenie animacji na .5 sekundy
+
+        queueDiv.style.bottom = parseInt(queueDiv.style.bottom) - document.getElementById("queueTable").children[0].offsetHeight + "px"
+
+        setTimeout(()=>{
+            queueDiv.style.transitionDuration = ".5s"
+        }, 500)
 
         return
     }
@@ -1134,3 +1195,35 @@ document.getElementById("queueDivCollapseButton").addEventListener("click", ()=>
 })
 
 queuePositioner()
+
+
+
+// notification player
+
+let notifyPlayerSupport = false
+
+
+if("mediaSession" in navigator){
+
+    notifyPlayerSupport = true
+}
+
+navigator.mediaSession.setActionHandler("play", ()=>{
+
+    playSong()
+})
+
+navigator.mediaSession.setActionHandler("pause", ()=>{
+
+    stopSong()
+})
+
+navigator.mediaSession.setActionHandler("nexttrack", ()=>{
+
+    nextSong()
+})
+
+navigator.mediaSession.setActionHandler("previoustrack", ()=>{
+
+    previousSong()
+})
