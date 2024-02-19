@@ -314,6 +314,11 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             showLink.innerText = "view this show on Archive"
 
 
+            document.getElementById("shareShowButton").style.display = "block"
+
+
+
+
             try{
                 document.getElementsByClassName("tableRowActive")[0].classList.remove("tableRowActive")
             }catch{
@@ -841,8 +846,22 @@ document.getElementById("yearChoiceButton").addEventListener("click", async ()=>
     getRandomShow(document.getElementById("yearSelect").value)
 })
 
+document.getElementById("shareShowButton").addEventListener("click", ()=>{
+    navigator.clipboard.writeText("https://deadplayer.onrender.com/"+'#showID="' + showID + '"')
+})
+
 window.onload = ()=>{
     getTodayShows()
+
+    if(window.location.href.includes("showID") == true){
+
+        showID = window.location.href.slice(window.location.href.indexOf("ID")+6)
+        showID = showID.substring(0,showID.indexOf("%22"))
+        // tu rob jesli jest shared
+        console.log(showID)
+
+        setupSongTable()
+    }
 }
 
 // sekcja playera

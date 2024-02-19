@@ -261,3 +261,7 @@ body{
     padding: .3em .5em;
     cursor: pointer;
 }
+
+#shareShowButton{
+    display: none;
+}
