@@ -1,10 +1,13 @@
 
 window.onbeforeunload = function() {
-    return 'czy na pewno chcesz zamknac odtwarzacz?';
+    return 'are you sure you want to quit?';
 };
 
+window.onresize = ()=>{
+    queuePositioner()
+}
 
-let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date
+let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date, venueName
 let loadingToggle = false
 
 let songArray = [[],[],[]]  // 0 - ID,   1 - title,   2 - length
@@ -55,6 +58,30 @@ function badDateConverter(goodDate){            //konwertuje z rrrr-mm-dd na dd-
 
     return badDate
 }
+
+// tabsy ddo show selectera
+
+
+
+function switchTabs(event, tab){
+    selectdiv = document.getElementsByClassName("selectDiv")
+
+    for(let i=0; i<selectdiv.length; i++){
+        selectdiv[i].style.display = "none";
+    }
+
+    selecttab = document.getElementsByClassName("selectTab")
+
+    for(let i=0; i<selecttab.length; i++){
+        selecttab[i].className = selecttab[i].className.replace(" activeTab","")
+    }
+
+    document.getElementById(tab).style.display = "block";
+    event.currentTarget.className += " activeTab"
+}
+
+
+
 
 async function fetchShow(date){      // date to data w formacie rrrr-mm-dd    fetch show fetchuje idenifiery i wgl, a getshowbydate
 
@@ -191,6 +218,8 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
         
     }
 
+    venueName = sortedArray[0].title.slice(21)
+
     document.getElementById("showDate").textContent = sortedArray[0].title + ", " + dayOfTheWeek
 
 
@@ -254,7 +283,7 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             audType = "aud"
         }
         else if(sortedArray[i].identifier.toLowerCase().includes("gd")==true){
-            audType = "unknown"
+            audType = "?"
         }
 
 
@@ -307,6 +336,11 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             showLink.href = "https://archive.org/details/"+showID
 
             showLink.innerText = "view this show on Archive"
+
+
+            document.getElementById("shareShowButton").style.display = "block"
+
+
 
 
             try{
@@ -836,8 +870,22 @@ document.getElementById("yearChoiceButton").addEventListener("click", async ()=>
     getRandomShow(document.getElementById("yearSelect").value)
 })
 
+document.getElementById("shareShowButton").addEventListener("click", ()=>{
+    navigator.clipboard.writeText("https://deadplayer.onrender.com/"+'#showID="' + showID + '"')
+})
+
 window.onload = ()=>{
     getTodayShows()
+
+    if(window.location.href.includes("showID") == true){
+
+        showID = window.location.href.slice(window.location.href.indexOf("ID")+6)
+        showID = showID.substring(0,showID.indexOf("%22"))
+        // tu rob jesli jest shared
+        console.log(showID)
+
+        setupSongTable()
+    }
 }
 
 // sekcja playera
@@ -850,34 +898,26 @@ let infoDiv = document.getElementById("infoDiv")
 
 let currentSongID = 0
 
+let skipTuning = false
+
+document.getElementById("skipTuning").addEventListener("click", ()=>{
+
+    skipTuning = document.getElementById("skipTuning").checked
+})
+
 document.getElementById("volumeControl").addEventListener("change", ()=>{
+
     currentSong.volume = document.getElementById("volumeControl").value
 })
 
 document.getElementById("prevButton").addEventListener("click", ()=>{
-    if(currentSong.currentTime<5 && currentSongID!=0){
-        // currentSong.pause()
-
-        //if currsongid <0 then play currsongid0
-        startSong(currentShowID,songArray[0][currentSongID-1], currentSongID-1)
-        
-    }
-    if(currentSong.currentTime>=5){
-
-        startSong(currentShowID, songArray[0][currentSongID], currentSongID)
-    }
+    
+    previousSong()
 })
 
 document.getElementById("nextButton").addEventListener("click", ()=>{
 
-    if(queueArray[0].length > 0){
-        startSong(queueArray[0][0],queueArray[1][0],queueArray[2][0])
-        return
-    }
-
-    if(currentSongID!=songArray[0].length-1)
-
-    startSong(currentShowID,songArray[0][currentSongID+1], currentSongID+1)
+    nextSong()
 })
 
 document.getElementById("pausePlayButton").addEventListener("click", ()=>{
@@ -908,8 +948,18 @@ currentSong.addEventListener("ended", ()=>{
         return
     }
 
-    currentSongID++
-    startSong(currentShowID, songArray[0][currentSongID], currentSongID)
+
+    if(skipTuning == true){
+        if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true || songArray[1][currentSongID+1].toLowerCase().includes("repairs") == true){
+            
+            console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
+            startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)
+            return
+        }
+    }
+    
+
+    startSong(currentShowID, songArray[0][currentSongID+1], currentSongID+1)
 
     
 
@@ -933,8 +983,7 @@ function startSong(currShowID, songID, tableOrder){
 
 
     if(currShowID.includes("/") == true){    //odpala sie tylko gdy piosenka jest queued
-
-        
+ 
 
         currentSong.src = "https://archive.org/download/"+currShowID
       
@@ -942,9 +991,6 @@ function startSong(currShowID, songID, tableOrder){
         document.getElementById("songProgressBar").max = minuteToSecond(queueArray[2][0])
         infoDiv.textContent = queueArray[1][0]
 
-
-        
-        
 
         playSong()
 
@@ -964,9 +1010,59 @@ function startSong(currShowID, songID, tableOrder){
 
     document.getElementById("totalTime").textContent = songArray[2][currentSongID]
     document.getElementById("songProgressBar").max = minuteToSecond(songArray[2][currentSongID])
-    infoDiv.textContent = songArray[1][currentSongID]
+    infoDiv.textContent = songArray[1][currentSongID]       // song name
+
+
+    // notify player 
+
+    if(notifyPlayerSupport == true){
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: infoDiv.textContent,
+            artist: "Grateful Dead",
+            album: venueName,
+            artwork:[
+                {src : "../img/notifyTemp.jpg", type : "image/png"}
+            ]
+        })
+    }
 
     playSong()
+}
+
+function previousSong(){
+    if(currentSong.currentTime<5 && currentSongID!=0){
+        // currentSong.pause()
+
+        //if currsongid <0 then play currsongid0
+        startSong(currentShowID,songArray[0][currentSongID-1], currentSongID-1)
+        
+    }
+    if(currentSong.currentTime>=5){
+
+        startSong(currentShowID, songArray[0][currentSongID], currentSongID)
+    }
+}
+
+function nextSong(){
+    if(queueArray[0].length > 0){
+        startSong(queueArray[0][0],queueArray[1][0],queueArray[2][0])
+        return
+    }
+
+    if(currentSongID!=songArray[0].length-1){
+
+        if(skipTuning == true){
+            if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true){
+            
+                console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
+                startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)
+                return
+            }
+        }
+
+        startSong(currentShowID,songArray[0][currentSongID+1], currentSongID+1)
+    }
 }
 
 function preloadNextSong(){
@@ -1007,18 +1103,33 @@ let queueDiv = document.getElementById("queueDiv")
 
 let queueTable = document.getElementById("queueTable")
 
+let queueCollapsed = false
+
 function queuePositioner(){
+
     let controlDivHeight = document.getElementById("controlDiv").offsetHeight
     document.getElementById("queueDiv").style.bottom = controlDivHeight + "px"
+
 }
 
 function queueAddFunc(showSongID, songName, songLength){
+
+    if(queueArray[0].length > 20){
+        alert("too many songs in the queue!!!")
+        return
+    }
+
+    document.getElementById("queueDivCollapseButton").style.display = "block"
 
     queueArray[0].push(showSongID)
     queueArray[1].push(songName)
     queueArray[2].push(songLength)
 
     addToQueueTable()
+
+    if(queueCollapsed == true){
+        collapseExpandQueue(true)       // updatenij kolejke zeby sie przesunela w dol o wysokosc jednego rekordu jesli jest schowana
+    }
 }
 
 function addToQueueTable(){
@@ -1057,6 +1168,8 @@ function removeFromQueue(queueID){
 
     document.getElementById(queueID).remove()
 
+    
+
     for(let i = 0; i < queueArray[0].length; i++){
         if(queueArray[3][i] == queueID){
 
@@ -1067,4 +1180,93 @@ function removeFromQueue(queueID){
             queueArray[3].splice(i, 1)
         }
     }
+
+    if(queueArray[0].length == 0){
+        document.getElementById("queueDivCollapseButton").style.display = "none"
+    }
 }
+
+function collapseExpandQueue(update){
+
+    let bottomValue = queueDiv.style.bottom.toString()
+
+    let controlDivHeight = document.getElementById("controlDiv").offsetHeight
+
+    if(update != null && queueCollapsed == true){
+
+
+        queueDiv.style.transitionDuration = "0s"    // dodawanie do queue gdy jest zamknieta. wylaczenie animacji na .5 sekundy
+
+        queueDiv.style.bottom = parseInt(queueDiv.style.bottom) - document.getElementById("queueTable").children[0].offsetHeight + "px"
+
+        setTimeout(()=>{
+            queueDiv.style.transitionDuration = ".5s"
+        }, 500)
+
+        return
+    }
+
+    if(queueCollapsed == true){
+
+        queueDiv.style.bottom = controlDivHeight + "px"
+
+        document.getElementById("queueDivCollapseButton").textContent = "\\/ collapse \\/"
+
+        queueCollapsed = false
+
+        return
+    }
+
+    if(queueCollapsed == false){
+    
+        queueDiv.style.bottom = controlDivHeight - queueTable.offsetHeight + "px"
+
+        document.getElementById("queueDivCollapseButton").textContent = "/\\ expand /\\"
+
+        queueCollapsed = true
+
+        return
+    }
+
+    
+
+
+}
+
+document.getElementById("queueDivCollapseButton").addEventListener("click", ()=>{
+    collapseExpandQueue()
+})
+
+queuePositioner()
+
+
+
+// notification player
+
+let notifyPlayerSupport = false
+
+
+if("mediaSession" in navigator){
+
+    notifyPlayerSupport = true
+}
+
+navigator.mediaSession.setActionHandler("play", ()=>{
+
+    playSong()
+})
+
+navigator.mediaSession.setActionHandler("pause", ()=>{
+
+    stopSong()
+})
+
+navigator.mediaSession.setActionHandler("nexttrack", ()=>{
+
+    nextSong()
+})
+
+navigator.mediaSession.setActionHandler("previoustrack", ()=>{
+
+    previousSong()
+})

@@ -5,6 +5,12 @@
 /* #089896, #2A7F84, #F1882D, #EF6145, #A12775 */
 
 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 *{
     box-sizing: border-box;
 }
@@ -14,8 +20,14 @@ html{
 }
 
 body{
+    background-color: #a84885;
+    margin:0;
+}
+
+#pagePadding{
+    margin: 0 10%;
     background-color: #A12775;
-    
+    min-height: 100vh;
 }
 
 #playerContent{
@@ -25,8 +37,12 @@ body{
     float: right;
 }
 #pageHeader{
+    margin-top: 0;
     text-align: center;
     font-family: 'Kanit', sans-serif;
+}
+#deadLogo{
+    width:50%;
 }
 #player{
     
@@ -34,6 +50,10 @@ body{
 #datePickContainer{
 
 }
+
+
+/* RESULTS */
+
 #resultsContainer{
     clear: both;
     
@@ -69,6 +89,17 @@ body{
 .formButtons{
     cursor: pointer;
 }
+
+/* TODAY SHOWS */
+
+#todayShowsContainer{
+    float:right;
+    
+    background-color: #2A7F84;
+    border: 10px solid #EF6145;
+    box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
+    padding: 2rem;
+}
 #todayShowsList{
     margin:0;
 }
@@ -81,26 +112,53 @@ body{
 .todayShowLink{
     cursor: pointer;
 }
-#randomShowContainer{
 
-}
 
-#randomChoiceContainer{
-    
-}
+/* SHOW SELECTOR */
 
-#todayShowsContainer{
+#selectDivTabWindow{
+    width:30%;
+    float:left;
 
-}
-
-.selectDiv{
     background-color: #2A7F84;
     border: 10px solid #EF6145;
-    box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
+    
 
-    width:33%;
-    float: left;
+}
+.activeSelectDiv{
+    display:block;
+}
+.notactiveSelectDiv{
+    display:none;
+}
+.selectTab{
+    float:left;
+    width:50%;
+    background-color: #e6a653;
+    color:black;
+    transition: .2s;
+    text-align: center;
+    padding:.5rem;
+
+    border:2px solid #EF6145;
+    border-bottom: 4px solid #EF6145;;
+}
+.activeTab{
+    /* background-color: rgba(239, 97, 69, 0.616); */
+    transition: .3s;
+    letter-spacing: .2rem;
+    box-shadow: inset 0px 0px 12px 5px rgba(255, 255, 255, 0.6);
+}
+#selectDivWrapper{
+    clear: both;
+    padding:2rem;
+    box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
+    min-height: 16rem;
+}
+.selectDiv{
+    box-sizing: border-box;
     padding:2%;
+    
 }
 .selectDivHeader{
     margin-top:0;
@@ -129,8 +187,8 @@ body{
 
 
 @media(max-width: 768px){
-    .selectDiv{
-        width:100%;
+    #selectDivTabWindow{
+        width: 100%;
     }
 }
 
@@ -142,6 +200,7 @@ body{
     left:0;
     background-color: rgb(49, 49, 49);
     color:white;
+    z-index: 100;
 }
 
 #mediaPlayer > div{
@@ -227,6 +286,26 @@ body{
 
 #queueDiv{
     position: fixed;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+    z-index: 10;
+    user-select: none;
+}
+
+#queueDivCollapseButton{
+    position:relative;
+    top: -1 px;
+    background-color: rgb(68, 68, 68);
+    color: white;
+    padding: .2em .5em;
+    display: none;
+    margin: 0 1em;
+    border: 1px solid white;
+    border-bottom: none;
+    border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
+    text-align: center;
+    cursor: pointer;
 }
 
 #queueTable{
@@ -238,4 +317,9 @@ body{
     border: 1px white solid;
     color: white;
     padding: .3em .5em;
+    cursor: pointer;
+}
+
+#shareShowButton{
+    display: none;
 }
