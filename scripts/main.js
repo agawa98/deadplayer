@@ -10,6 +10,8 @@ window.onresize = ()=>{
 let dzien, miesiac, rok, typeFilter, sortBy, currentShowID, showID, direction, newArray, date, venueName
 let loadingToggle = false
 
+let setlistShown = true
+
 let songArray = [[],[],[]]  // 0 - ID,   1 - title,   2 - length
 
 let currentShowArray
@@ -87,14 +89,22 @@ async function fetchShow(date){      // date to data w formacie rrrr-mm-dd    fe
 
     let query = "https://archive.org/advancedsearch.php?q=grateful+dead+"+date+"&fl%5B%5D=avg_rating&fl%5B%5D=downloads&fl%5B%5D=identifier&fl%5B%5D=title&sort%5B%5D=&sort%5B%5D=&sort%5B%5D=&rows=100&page=1&output=json&save=yes"
     
-    
+    try{
+        let data = await fetch(query)
+        let res = await data.json()
 
-    let data = await fetch(query)
-    let res = await data.json()
-    
+        document.getElementById("couldNotConnect").style.display = "none"
 
+        return res
 
-    return res
+        
+
+    }catch(err){
+        console.log("could not connect: " + err)
+
+        document.getElementById("couldNotConnect").style.display = "block"
+        loading()
+    }
 }
 
 async function fetchSongs(backup){
@@ -164,7 +174,7 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
 
 
 
-    typeFilter = document.getElementById("recordingType").value
+    typeFilter = "any"
 
     console.log(res)
     let sortedArray = sorter(res.response)
@@ -231,7 +241,7 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             //         TABLE HEADER
 
             let typeCell = document.createElement("td")
-            typeCell.textContent = "Recording Type"
+            typeCell.textContent = "Rec Type"
 
             let idCell = document.createElement("td")
             idCell.textContent = "Archive Recording ID"
@@ -239,8 +249,8 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             let downloadsCell = document.createElement("td")
             downloadsCell.textContent = "Downloads"
 
-            let ratingCell = document.createElement("td")
-            ratingCell.textContent = "Avg rating"
+            // let ratingCell = document.createElement("td")
+            // ratingCell.textContent = "Avg rating"
             
             
 
@@ -253,7 +263,7 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
             tableRow.appendChild(typeCell)
             tableRow.appendChild(idCell)
             tableRow.appendChild(downloadsCell)
-            tableRow.appendChild(ratingCell)
+            // tableRow.appendChild(ratingCell)
 
             document.getElementById("resultsTable").appendChild(tableRow)
 
@@ -281,6 +291,9 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
         }
         else if(sortedArray[i].identifier.toLowerCase().includes("aud")==true||sortedArray[i].identifier.toLowerCase().includes("audience")==true){
             audType = "aud"
+        }
+        else if(sortedArray[i].identifier.toLowerCase().includes("fm")==true||sortedArray[i].identifier.toLowerCase().includes("broadcast")==true){
+            audType = "radio"
         }
         else if(sortedArray[i].identifier.toLowerCase().includes("gd")==true){
             audType = "?"
@@ -312,13 +325,13 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
 
 
 
-        let ratingCell = document.createElement("td")
-        ratingCell.textContent = sortedArray[i].avg_rating
+        // let ratingCell = document.createElement("td")
+        // ratingCell.textContent = sortedArray[i].avg_rating
 
         
         
 
-        tableRow.append(typeCell, idCell, downloadsCell, ratingCell)
+        tableRow.append(typeCell, idCell, downloadsCell)
         
 
         tableRow.addEventListener("click",(el)=>{
@@ -364,6 +377,10 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
         let endColorB = color1[2] + iterNumRecords/numRecords * (color2[2]-color1[2])
 
         tableRow.style.background = "rgb("+endColorR+","+endColorG+","+endColorB+")"
+
+        cas = "cas" + Math.floor(Math.random()*10) + ".png"
+
+        tableRow.style.background = "url('../img/"+cas+"')"
 
         iterNumRecords--
 
@@ -420,15 +437,15 @@ async function setupSongTable(){
     timeHeader.textContent = "Length"
     timeHeader.style.padding = ".5em"
 
-    let idHeader = document.createElement("th")
-    idHeader.textContent = "Archive song ID"
+    // let idHeader = document.createElement("th")
+    // idHeader.textContent = "Archive song ID"
 
     let queueHeader = document.createElement("th")
     queueHeader.textContent = "Queue"
 
 
 
-    hrTableRow.append(numberHeader, nameHeader, timeHeader, idHeader, queueHeader)
+    hrTableRow.append(numberHeader, nameHeader, timeHeader, queueHeader)
 
     tabelka.append(hrTableRow)
 
@@ -441,7 +458,13 @@ async function setupSongTable(){
 
         let songName = document.createElement("td")
         songName.id = "songTableName"
-        songName.textContent = setupSongArray[1][i]
+        console.log("name :" + setupSongArray[1][i])
+        if(setupSongArray[1][i]=="" || setupSongArray[1][i]==undefined){
+            songName.textContent = "<untitled>"
+        }else{
+            songName.textContent = setupSongArray[1][i]
+        }
+        
         
         let songOrder = document.createElement("td")
         songOrder.id = "songTableOrder"
@@ -452,10 +475,6 @@ async function setupSongTable(){
         let songLength = document.createElement("td")
         songLength.id = "songTableLength"
         songLength.textContent = setupSongArray[2][i]
-
-        let songID = document.createElement("td")
-        songID.id = "songTableID"
-        songID.textContent = setupSongArray[0][i]
 
         let queueAdd = document.createElement("td")
         queueAdd.id = showID + "/" + setupSongArray[0][i]
@@ -468,7 +487,7 @@ async function setupSongTable(){
         })
 
   
-        let elementsArray = [songOrder, songName, songLength, songID]
+        let elementsArray = [songOrder, songName, songLength]
 
         for(let i = 0; i < elementsArray.length; i++){
             elementsArray[i].addEventListener("click", async()=>{
@@ -487,13 +506,75 @@ async function setupSongTable(){
 
 
 
-        tableRow.append(songOrder, songName, songLength, songID, queueAdd)
+        tableRow.append(songOrder, songName, songLength, queueAdd)
 
         tabelka.append(tableRow)
     }
 
     queuePositioner()
 
+    setlistSetup()
+
+}
+
+// ustawienie wysuwanej setlisty na prawo
+
+function setlistSetup(){
+    document.getElementById("setlistWrapper").style.right = "0px"
+
+
+
+    // "-" + document.getElementById("setlistWrapper").offsetWidth + "px"
+
+    //  document.getElementById("setlistPull").style.transform = "rotate(-90deg)"
+
+   
+
+
+
+    document.getElementById("setlistWrapper").style.display = "block"
+
+    document.getElementById("setlistWrapper").style.height = document.getElementById("songTable").clientHeight + "px"
+
+    document.getElementById("setlistPull").style.left = -(document.getElementById("setlistPull").clientWidth) + 1 + "px"
+
+    document.getElementById("setlistPull").style.top = (document.getElementById("setlistWrapper").clientHeight/2)-(document.getElementById("setlistPull").clientHeight/2) +"px"
+    
+    document.getElementById("setlistPull").addEventListener("click", setlistClick)
+    
+
+}
+
+function setlistClick(){
+
+
+    // TU JEST ZAMKNIETA
+    if(setlistShown == true){
+
+        document.getElementById("setlistWrapper").style.right = -document.getElementById("setlistWrapper").clientWidth + "px"
+
+        document.getElementById("setlistWrapper").classList.remove("boxShadow")
+
+        // document.getElementById("setlistPull").style.transform = "rotate(-180deg)"
+        setlistShown = false
+        console.log("now false")
+        return;
+    }
+
+
+
+    // TU JEST OTWARTA
+    if(setlistShown == false){
+
+        document.getElementById("setlistWrapper").style.right = "0px"
+
+        document.getElementById("setlistWrapper").classList.add("boxShadow")
+
+        // document.getElementById("setlistPull").style.transform = "rotate(0deg)"
+        setlistShown = true
+        console.log("now true")
+        return;
+    }    
 }
 
 function doWeHaveThisDate(date){        // sprawdza czy show z input fieldow jest w naszym showarray, useful przy szukaniu next/prev show
@@ -730,17 +811,10 @@ async function getPrevNextShow(direction){  // direction - szukamy w tyl czy w p
             if(miesiac>12){
                 miesiac=1
                 rok++
-                if(rok==1980 &&miesiac==7&&dzien==10){
-                    let divek = document.getElementById("arrayContainer")
-                    for(let i=0;i<showArray.length;i++){
-                        divek.textContent += showArray[i][0]
-                    }
-                }
             }
         }
     }
     if(direction=="prev"){
-        console.log(dzien)
         dzien--
         if(dzien<1){
             dzien=31
@@ -950,7 +1024,7 @@ currentSong.addEventListener("ended", ()=>{
 
 
     if(skipTuning == true){
-        if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true || songArray[1][currentSongID+1].toLowerCase().includes("repairs") == true){
+        if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true || songArray[1][currentSongID+1].toLowerCase().includes("repairs") == true || songArray[1][currentSongID+1].toLowerCase().includes("crowd") == true){
             
             console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
             startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)
@@ -1053,7 +1127,7 @@ function nextSong(){
     if(currentSongID!=songArray[0].length-1){
 
         if(skipTuning == true){
-            if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true){
+            if(songArray[1][currentSongID+1].toLowerCase().includes("tuning") == true || songArray[1][currentSongID+1].toLowerCase().includes("tune") == true || songArray[1][currentSongID+1].toLowerCase().includes("repairs") == true || songArray[1][currentSongID+1].toLowerCase().includes("crowd") == true){
             
                 console.log("tuning skip: " + songArray[1][currentSongID+1].toLowerCase)
                 startSong(currentShowID,songArray[0][currentSongID+2], currentSongID+2)

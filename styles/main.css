@@ -13,7 +13,24 @@
 
 *{
     box-sizing: border-box;
+
+    
 }
+
+body *:not(#showRecord, #showRecord *) {
+    font-family: 'Kanit', sans-serif;
+}
+
+.showRecord{
+    
+    font-family: 'Permanent Marker', cursive;
+}
+
+
+
+
+
+
 
 html{
     padding:0;
@@ -28,6 +45,7 @@ body{
     margin: 0 10%;
     background-color: #A12775;
     min-height: 100vh;
+    padding: 0 1.5rem;
 }
 
 #playerContent{
@@ -51,31 +69,48 @@ body{
 
 }
 
+#leftPanel{
+    width:30%;
+    float:left;
+}
+
+#rightPanel{
+    width:70%;
+    float:right;
+    padding-left: 3rem;
+}
+
+
+
 
 /* RESULTS */
 
 #resultsContainer{
     clear: both;
+
+    
     
 }
 #resultsTable{
+
+    color:wheat;
+    text-shadow: rgb(0, 0, 0) 1px 0px 0px, rgb(0, 0, 0) 0.540302px 0.841471px 0px, rgb(0, 0, 0) -0.416147px 0.909297px 0px, rgb(0, 0, 0) -0.989992px 0.14112px 0px, rgb(0, 0, 0) -0.653644px -0.756802px 0px, rgb(0, 0, 0) 0.283662px -0.958924px 0px, rgb(0, 0, 0) 0.96017px -0.279415px 0px;
     border-collapse: collapse;
     float: left;
-    width: 40vw;
+    width: 80%;
+    
+}
+#resultsTable>td, th{
+    border: none;
 }
 #resultsTable>tr>td{
-    border: 2px solid #fa1f0f;
-    padding: .5rem
+    border:none;
+    padding: 1rem .5rem;
 }
 #resultsTable>tr, #songTable>tr{
     cursor: pointer;
 }
-#resultsTable :hover{
-    background-color: rgb(255, 239, 169) !important;     /* nie wiem czemu tutaj trzeba important ale inaczej highlightuje tylko cell*/
-}
-.tableRowActive{
-    background-color: rgb(255, 208, 0) !important;
-}
+
 
 #showNotFound{
     display: none;
@@ -90,15 +125,36 @@ body{
     cursor: pointer;
 }
 
+.showRecord{
+    background-repeat: no-repeat !important;
+    background-size: 100% 100% !important;
+    transition: .15s !important;
+    font-family: 'Permanent Marker', cursive !important;
+
+}
+.showRecord:hover{
+    transform: scale(1.1);
+    transition: .2s;
+    margin:0;
+    padding:0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}  
+
+
+
+
 /* TODAY SHOWS */
 
 #todayShowsContainer{
-    float:right;
     
     background-color: #2A7F84;
     border: 10px solid #EF6145;
+    border-top: 0;
     box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
     padding: 2rem;
+    color:rgb(255, 240, 213);
+    text-shadow: 0px 0px 4px rgb(0, 0, 0);
+    border-bottom-left-radius: 2rem;
 }
 #todayShowsList{
     margin:0;
@@ -114,16 +170,35 @@ body{
 }
 
 
+/* OPTIONS */
+
+#optionsWrapper{
+    background-color: #2A7F84;
+    border: 10px solid #EF6145;
+    border-top: 0;
+    box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
+    padding: 2rem;
+    color:rgb(255, 240, 213);
+    text-shadow: 0px 0px 4px rgb(0, 0, 0);
+}
+#skipTuning{
+    margin-bottom: 0;
+}
+
 /* SHOW SELECTOR */
 
 #selectDivTabWindow{
-    width:30%;
-    float:left;
+    position: relative;
 
     background-color: #2A7F84;
     border: 10px solid #EF6145;
     
 
+}
+#selectDivTabWindow .formButtons{
+    position:absolute;
+    bottom: 2rem;
+    right: 2rem;
 }
 .activeSelectDiv{
     display:block;
@@ -153,7 +228,7 @@ body{
     clear: both;
     padding:2rem;
     box-shadow: inset 0px 0px 0px 12px rgba(241, 136, 45, 1);
-    min-height: 16rem;
+    min-height: 13rem;
 }
 .selectDiv{
     box-sizing: border-box;
@@ -161,6 +236,9 @@ body{
     
 }
 .selectDivHeader{
+
+    color:rgb(255, 240, 213);
+    text-shadow: 0px 0px 4px rgb(0, 0, 0);
     margin-top:0;
     font-size: 1.5rem;
     font-family: 'Kanit', sans-serif;
@@ -191,6 +269,9 @@ body{
         width: 100%;
     }
 }
+
+
+/* PLAYER */
 
 
 #mediaPlayer{
@@ -251,18 +332,91 @@ body{
     float:right;
 }
 
+
+/* SONG TABLE */
+
+#setlistWrapper{
+    display: none;
+    transition: bottom .6s, top .6s, left .6s, right .6s;
+    height: 73%;
+    position:fixed;
+    top: 10%;
+    max-height: 73%;
+    z-index: 10000;
+    /* overflow-y: scroll; */
+
+
+    
+}
+
+#setlistRelative{
+    height: 100%;
+}
+
+#setlistPull{
+    position:absolute;
+    z-index: -10;
+    height: 10rem;
+    cursor: pointer;
+}
+
+#songTableScroll{
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.boxShadow{
+    -webkit-box-shadow: 0px 0px 8px 6px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 0px 0px 8px 6px rgba(66, 68, 90, 1);
+    box-shadow: 0px 0px 8px 6px rgba(66, 68, 90, 1);
+}
+
+
+#songTableScroll::-webkit-scrollbar{
+    display: none;
+}
+
+
+
+#setlistRelative{
+    position: relative;
+}
+
 #songTable{
     border-collapse: collapse;
-    background-color: rgb(255, 166, 0);
+    background-color: rgb(255, 255, 255);
     color: black;
     float: left;
+    background-image: url("../img/watercolor-paper-texture.jpg");
+    overflow-y:hidden;
 }
 
 #songTable > tr > td{
-    background-color: orange;
-    border: 1px white solid;
+
+    border: none;
     padding: .5em;
+    font-family: "Coming Soon", cursive;
+    font-weight: 600;
+  font-style: normal;
 }
+
+#songTable > tr{
+    transition: .3s;
+}
+
+#songTable > tr:hover{
+    background-color: #eb9f5c9c;
+}
+
+
+
+
+
+
+
+
 
 #currentSong{
     display: none;
@@ -272,6 +426,9 @@ body{
     height: 10vh;
     clear: both;
 }
+
+
+/* QUEUE */
 
 #arrow{
     float: left;
