@@ -378,9 +378,6 @@ async function setupShowTable(res, date){  // res to response z archiva. date da
 
         tableRow.style.background = "rgb("+endColorR+","+endColorG+","+endColorB+")"
 
-        cas = "cas" + Math.floor(Math.random()*10) + ".png"
-
-        tableRow.style.background = "url('../img/"+cas+"')"
 
         iterNumRecords--
 
